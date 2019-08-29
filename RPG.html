@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>rpg</title>
+  </head>
+  <body>
+    <form id="jsTypeing">
+      <input type="text" placeholder="이름을 입력하세요" />
+    </form>
+    <div id="log"></div>
+  </body>
+  <script>
+    let gameOver = false;
+    let battle = false;
+
+    const logMessage = (msg, color = "black") => {
+      const div = document.createElement("div");
+      div.innerText = msg;
+      div.style.color = color;
+      document.querySelector("#log").appendChild(div);
+    };
+
+    class Character {
+      constructor(name, hp, att) {
+        this.name = name;
+        this.hp = hp;
+        this.att = att;
+      }
+
+      attack(target) {
+        logMessage(`${this.name}이 ${target.name}을 공격합니다`);
+        target.attacked(this.att);
+      }
+
+      attacked(damage) {
+        this.hp -= damage;
+        logMessage(`${this.name}의 체력이 ${this.hp}가 되었습니다.`);
+        if (this.hp <= 0) {
+          battle = false;
+        }
+      }
+    }
+
+    class Hero extends Character {
+      constructor(name, hp = 100, att = 10, lev = 1, xp = 0) {
+        super(name, hp, att);
+        this.lev = lev;
+        this.xp = xp;
+      }
+
+      attack(target) {
+        logMessage(`${this.name}님이 ${target.name}을 공격합니다.`);
+        target.attacked(this.att);
+        if (target.hp <= 0) this.gainXp(target);
+      }
+
+      attacked(damage) {
+        this.hp -= damage;
+        logMessage(`${this.name}님의 체력이 ${this.hp} 남았습니다.`);
+        if (this.hp <= 0) {
+          logMessage(
+            `죽었습니다. 레벨 ${this.lev}에서 모험이 끝났습니다. F5를 눌러 다시 시작하세요`,
+            "red"
+          );
+          battle = false;
+          gameOver = true;
+        }
+      }
+
+      gainXp(target) {
+        logMessage(
+          `전투에서 승리하여 ${target.xp}의 경험치를 얻습니다.`,
+          "blue"
+        );
+        this.xp += target.xp;
+        if (this.xp >= 100 + 10 * this.lev) {
+          this.xp = this.xp - (100 + 10 * this.lev);
+          this.lev++;
+          this.hp = 100 + this.lev * 10;
+          this.att++;
+          logMessage(`레벨업! ${this.lev} 레벨이 되었습니다.`, "blue");
+          console.log(this.xp);
+        }
+      }
+    }
+
+    class Monster extends Character {
+      constructor(name, hp, att, lev, xp) {
+        super(name, hp, att);
+        this.lev = lev;
+        this.xp = xp;
+      }
+    }
+
+    const makeMonster = () => {
+      const monsterArray = [
+        ["rabiit", 25, 3, 1, 35],
+        ["skeleton", 50, 6, 2, 50],
+        ["soldier", 80, 4, 3, 75],
+        ["king", 120, 9, 4, 110],
+        ["devil", 250, 25, 6, 200]
+      ];
+
+      const monster = monsterArray[Math.floor(Math.random() * 5)];
+      return new Monster(
+        monster[0],
+        monster[1],
+        monster[2],
+        monster[3],
+        monster[4]
+      );
+    };
+
+    const type = document.getElementById("jsTypeing");
+
+    const handleGameStart = function(event) {
+      event.preventDefault();
+      const currentValue = type.firstElementChild.value;
+      const hero = new Hero(currentValue);
+      logMessage(`${hero.name}님이 모험을 시작합니다.`);
+      while (!gameOver) {
+        const monster = makeMonster();
+        logMessage(
+          `${monster.name}을 마주쳤습니다. 전투가 시작됩니다`,
+          "green"
+        );
+        battle = true;
+        while (battle) {
+          hero.attack(monster);
+          if (monster.hp > 0) {
+            monster.attack(hero);
+          }
+        }
+      }
+    };
+
+    if (type) {
+      type.addEventListener("submit", handleGameStart);
+    }
+  </script>
+</html>

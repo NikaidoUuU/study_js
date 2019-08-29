@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>menu</title>
+    <style>
+      body {
+        font-size: 3rem;
+      }
+      h1 {
+        background: #fff000;
+      }
+      .menu {
+        display: flex;
+        background: yellowgreen;
+      }
+      .menu-link {
+        margin: 0.1em;
+        padding: 0.3em;
+        color: #fff;
+        text-decoration: none;
+        background: dodgerblue;
+        list-style: none;
+      }
+      .menu-active {
+        background: orange;
+      }
+    </style>
+  </head>
+  <body>
+    <h1 id="main-title">
+      Event
+    </h1>
+
+    <nav class="menu">
+      <a href="#" class="menu-link" data-menu="1">menu 1</a>
+      <a href="#" class="menu-link" data-menu="2">menu 2</a>
+      <a href="#" class="menu-link" data-menu="3">menu 3</a>
+    </nav>
+
+    <script>
+      // let currentMenu; // 현재 활성화된 메뉴를 담을 변수
+      // const menuLinks = document.querySelectorAll(".menu-link");
+
+      // function clickMenuHandler() {
+      //   if (currentMenu) {
+      //     currentMenu.classList.remove("menu-active");
+      //   }
+      //   this.classList.add("menu-active");
+      //   currentMenu = this;
+      // }
+
+      // for (let i = 0; i < menuLinks.length; i++) {
+      //   menuLinks[i].addEventListener("click", clickMenuHandler);
+      // }
+      let currentMenu; // 현재 활성화된 메뉴를 담을 변수
+      const menu = document.querySelector(".menu");
+
+      function activate(elem) {
+        elem.classList.add("menu-active");
+        currentMenu = elem;
+      }
+
+      function inactivate(elem) {
+        elem.classList.remove("menu-active");
+      }
+
+      function clickHandler(event) {
+        if (currentMenu) {
+          inactivate(currentMenu);
+        }
+        activate(event.target);
+      }
+
+      menu.addEventListener("click", clickHandler);
+
+      activate(document.querySelectorAll(".menu-link")[2]);
+    </script>
+  </body>
+</html>
