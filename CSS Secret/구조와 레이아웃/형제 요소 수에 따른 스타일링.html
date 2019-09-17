@@ -18,6 +18,11 @@
         font-size: 0;
       }
 
+      .palette li:first-child:nth-last-child(n + 10),
+      .palette li:first-child:nth-last-child(n + 10) ~ li {
+        display: none;
+      }
+
       .palette li:only-child .delete {
         display: none;
       }
@@ -134,7 +139,7 @@
           addColor(button.parentNode.parentNode);
         } else if (button.className == "delete") {
           var li = button.parentNode.parentNode;
-          li.parentNode.removeChild(li);
+          li.remove();
         }
       };
     </script>
