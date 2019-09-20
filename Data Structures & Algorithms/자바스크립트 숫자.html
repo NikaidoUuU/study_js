@@ -147,14 +147,14 @@
           number /= divisor;
         }
         return number;
-      } // O(log divisor(number))
+      } // O(log divisor number)
 
       function isUgly(number) {
         number = maxDivide(number, 2);
         number = maxDivide(number, 3);
         number = maxDivide(number, 5);
         return number === 1;
-      } // O(log 2(n))
+      } // O(log 2 n)
 
       function arrayNUglyNumbers(n) {
         let counter = 0,
@@ -170,7 +170,7 @@
         }
 
         return uglyNumbers;
-      } // O(n(log 2(n))), isUgly 함수는 maxDivide(숫자, 2)의 시간 복잡도에 의해 제한된다.
+      } // O(n log 2 n), isUgly 함수는 maxDivide(숫자, 2)의 시간 복잡도에 의해 제한된다.
       // 따라서 arrayNUglyNumbers는 maxDivide의 시간 복잡도의 n배다.
     </script>
   </body>
