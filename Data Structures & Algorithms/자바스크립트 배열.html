@@ -1,0 +1,272 @@
+<html>
+  <body>
+    <script>
+      const array1 = [1, 2, 3, 4];
+      // .push 메서드의 시간 복잡도는 O(1)이다.
+      array1.push(5);
+
+      // .pop, .shift 메서드들의 시간 복잡도는 O(1)이다.
+      console.log(array1.pop()); // 5, 제거된 항목을 반환함
+      console.log(array1.shift()); // 1, 제거된 항목을 반환함
+
+      // 접근 연산은 인덱스를 사용해 메모리의 주소로부터 직접 값을 얻기 때문에 시간 복잡도는 O(1)이다.
+      array1[0];
+
+      // 반복은 n개의 항목들을 방문하기 때문에 모두 O(n)의 시간 복잡도를 지닌다.
+      for (let i = 0; i < array1.length; i++) {
+        console.log(array1[i]);
+      }
+
+      // .slice()는 기존 배열을 수정하지 않고도 해당 배열의 일부를 반환한다.
+      const array2 = [1, 2, 3, 4];
+      console.log(array2.slice(2, 4)); // [3, 4]를 반환한다
+      console.log(array2.slice(1)); // [2, 3, 4]를 반환한다
+      console.log(array1.slice() === array1); // 복사본을 반환하므로 메모리 주소가 달라 false
+
+      // 자바스크립트의 배열은 참조 기반이다. 이는 배열에 신규 변수를 할당한 다음
+      // 해당 신규 변수를 통해 배열을 변경할 경우 변경 사항이 원래 배열에도 적용된다는 것을 의미
+      const a = [1, 2, 3, 4];
+      const b = a;
+      b[0] = 5; // a : [5,2,3,4] b : [5,2,3,4], b가 원래 배열에 대한 참조이기 때문
+
+      // 새로운 배열을 생성하려면 .from()을 사용할 수 있다. O(n)
+      const c = [1, 2, 3, 4];
+      const d = Array.from(c);
+      console.log(c === d); // false
+      d[0] = 5; // c : [1,2,3,4] d : [5,2,3,4]
+
+      // .splice()는 기존 항목을 제거하거나 신규 항목을 추가함으로써 배열의 내용을 반환하고 변경한다. 최악의 경우 O(n)
+      const array3 = [1, 2, 3, 4];
+      console.log(array3.splice()); // []를 반환한다, array3 = [1,2,3,4]
+      console.log(array3.splice(1, 2, 5, 6, 7)); // [2,3]을 반환한다, array3 = [1,5,6,7,4]
+      console.log(array3.splice(1, 2)); // [5,6]을 반환한다, array3 = [1,7,4]
+
+      /* --------------------------------- 퀴즈 --------------------------------- */
+
+      // 배열 arr이 있고 어떤 수 weight가 주어졌을 때
+      // 합쳐서 weight가 되는 배열 내 항목 두 개의 인덱스를 반환하라.
+      // 만약 합쳐서 weight가 되는 항목 두 개가 존재하지 않는 경우 -1을 반환하라.
+      // 예: [1,2,3,4,5] 배열에 어떤 수 두개를 더해야 9가 될까? ([3, 4]를 반환하라)
+
+      // 간단한 방법(시간: O(n^2), 공간:O(1))
+      function findSum(arr, weight) {
+        for (let i = 0; i < arr.length; i++) {
+          for (let j = i + 1; j < arr.length; j++) {
+            if (arr[i] + arr[j] === weight) {
+              return [i, j];
+            }
+          }
+        }
+        return -1;
+      }
+      // const arr = [1,2,3,4,5]; const weight = 9;
+      // 여기서 정답은 4와 5의 조합이고, 이들의 인덱스는 [3, 4]이다.
+      // 5를 방문했을 때 정답을 찾았음을 어떻게 알 수 있을까?
+      // 현재 값이 5이고 weight가 9인 경우, 남은 필요한 weight는 4이다(9-5=4)
+      // 배열에서 4가 5 이전에 위치하기 때문에 정답을 O(n) 시간에 찾을 수 있다.
+      // 마지막으로 이미 방문한 항목들을 저장하기 위해 자바스크립트 객체를 해시 테이블로 사용한다.
+      // 자바스크립트 객체 속성에 값을 저장하고 객체 속성으로부터 값을 얻는 것은 O(1) 시간이 걸린다.
+      function findSumBetter(arr, weight) {
+        const hashtable = {};
+
+        for (let i = 0; i < arr.length; i++) {
+          const currentElement = arr[i];
+          const difference = weight - currentElement;
+
+          // check the right one alredy exists
+          if (hashtable[currentElement] !== undefined) {
+            return [hashtable[currentElement], i];
+          } else {
+            hashtable[difference] = i;
+          }
+        }
+        return -1;
+      } // 시간 O(n), 공간 O(n)
+
+      // k개의 정렬된 배열에서 공통 항목 찾기
+      // 각 배열을 반복 접근하면서 매 항목의 개수를 세는 방법이 있다.
+      // 하지만 반복되는 항목은 두 번 확인할 필요가 없다
+      // 이를 위해 개수를 증가시키기 전에 마지막 항목과 동일한지 확인해야 한다.
+      // 배열 모두를 반복 루프를 통해 접근한 뒤 해시 테이블의 속성을 반복 루프를 통해 접근해야 한다.
+      // 만약 해시 테이블의 어떤 항목의 값이 3인 경우 해당 항목은 세 개의 배열 모두에서 등장한다는 것을 의미한다.
+      // 또 다른 for 루프에 해당 항목이 몇 번 등장했는지 확인해(24번째 줄)
+      // 세 개의 배열 모두에 등장한 공통 항목만을 포함하는 배열로 일반화할 수 있다.
+      function commonElements(kArray) {
+        const hashmap = {};
+        const answer = [];
+        let last;
+
+        for (let i = 0; i < kArray.length; i++) {
+          const currentArray = kArray[i];
+          last = null;
+
+          for (let j = 0; j < currentArray.length; j++) {
+            const currentElement = currentArray[j];
+            if (last !== currentElement) {
+              if (!hashmap[currentElement]) {
+                hashmap[currentElement] = 1;
+              } else {
+                hashmap[currentElement]++;
+              }
+            }
+            last = currentElement;
+          }
+        }
+
+        for (let prop in hashmap) {
+          if (hashmap[prop] === kArray.length) {
+            answer.push(parseInt(prop));
+          }
+        }
+
+        return answer;
+      } // 시간: O(kn), 공간: O(n), 여기서 n은 가장 긴 배열의 길이이고 k는 배열의 개수다.
+      console.log(
+        commonElements([[1, 5, 5, 10, 20], [3, 4, 5, 5, 10], [5, 5, 10, 20]])
+      ); // [5, 10]
+
+      // 자바스크립트에는 다차원 배열이 없다. 대신에 가변 배열(항목이 배열인 배열)이 있다.
+      // 가변 배열의 항목은 차원과 크기가 다를 수 있다.
+
+      // 다차원 배열같은 가변 배열을 생성하는 도움 함수
+      const Matrix = (rows, columns) =>
+        [...Array(columns)].map((_, index) =>
+          Array(rows)
+            .fill(index * columns + 1)
+            .map((value, index) => value + index)
+        );
+
+      /* --------------------------------- 퀴즈 --------------------------------- */
+
+      // 행렬을 이용해 나선형으로 출력
+      // 왼쪽에서 오른쪽 -> 위에서 아래쪽 -> 오른쪽에서 왼쪽 -> 아래쪾에서 위쪽 -> 위 4가지 연산에 제한 걸기
+      const M = [
+        [1, 2, 3, 4, 5],
+        [6, 7, 8, 9, 10],
+        [11, 12, 13, 14, 15],
+        [16, 17, 18, 19, 20]
+      ];
+      function spiralPrint(M) {
+        let topRow = 0;
+        let leftCol = 0;
+        let btmRow = M.length - 1;
+        let rightCol = M[0].length - 1;
+
+        while (topRow < btmRow && leftCol < rightCol) {
+          for (let col = 0; col <= rightCol; col++) {
+            console.log(M[topRow][col]);
+          }
+          topRow++;
+          for (let row = topRow; row <= btmRow; row++) {
+            console.log(M[row][rightCol]);
+          }
+          rightCol--;
+          if (topRow <= btmRow) {
+            for (
+              let col = rightCol;
+              topRow >= btmRow ? col > 0 : col >= 0;
+              col--
+            ) {
+              console.log(M[btmRow][col]);
+            }
+            btmRow--;
+          }
+          if (leftCol <= rightCol) {
+            for (let row = btmRow; row > topRow; row--) {
+              console.log(M[row][leftCol]);
+            }
+            leftCol++;
+          }
+        }
+      } // 시간 O(mn), 공간(1), m은 열의 개수이고 n은 행의 개수다. 행렬의 각 항목을 단 한번만 방문하기 때문
+      spiralPrint(M);
+
+      // 틱택토, 판을 나타내는 행렬이 있을 때, 누군가 게임을 이겼는지 비겼는지 혹은 게임이 아직 끝나지 않았는지 결정해야 함
+      function checkRow(rowArr, letter) {
+        for (let i = 0; i < 3; i++) {
+          if (rowArr[i] != letter) {
+            return false;
+          }
+        }
+        return true;
+      }
+
+      function checkColumn(gameBoardMatrix, columnIndex, letter) {
+        for (let i = 0; i < 3; i++) {
+          if (gameBoardMatrix[i][columnIndex] != letter) {
+            return false;
+          }
+        }
+        return true;
+      }
+
+      function ticTacToeWinner(gameBoardMatrix, letter) {
+        // 행을 확인한다.
+        const rowWin =
+          checkRow(gameBoardMatrix[0], letter) ||
+          checkRow(gameBoardMatrix[1], letter) ||
+          checkRow(gameBoardMatrix[2], letter);
+
+        const colWin =
+          checkColumn(gameBoardMatrix, 0, letter) ||
+          checkColumn(gameBoardMatrix, 1, letter) ||
+          checkColumn(gameBoardMatrix, 2, letter);
+
+        const diagonalWinLeftToRight =
+          gameBoardMatrix[0][0] === letter &&
+          gameBoardMatrix[1][1] === letter &&
+          gameBoardMatrix[2][2] === letter;
+
+        const diagonalWinRightToLeft =
+          gameBoardMatrix[0][2] === letter &&
+          gameBoardMatrix[1][1] === letter &&
+          gameBoardMatrix[2][0] === letter;
+
+        return (
+          rowWin || colWin || diagonalWinLeftToRight || diagonalWinRightToLeft
+        );
+      }
+
+      const board = [["O", "-", "X"], ["-", "O", "-"], ["-", "X", "O"]];
+      console.log(ticTacToeWinner(board, "X")); // false
+      console.log(ticTacToeWinner(board, "O")); // true
+
+      // 행렬을 왼쪽으로 90도 회전하라.
+      // 101   ->   111
+      // 001   ->   001
+      // 111   ->   101
+      // 1. 행렬의 세 번째 열이 회전된 행렬의 첫 번째 행이 된다.
+      // 2. 행렬의 두 번째 열이 회전된 행렬의 두 번째 행이 된다.
+      // 3. 행렬의 첫 번째 열이 회전된 행렬의 세 번째 행이 된다.
+      const matrix = [[1, 0, 1], [0, 0, 1], [1, 1, 1]];
+
+      function rotateMatrix90Left(mat) {
+        const N = mat.length;
+
+        // 항목들을 하나씩 처리한다.
+        for (let x = 0; x < N; x++) {
+          // 현재 항목을 기준으로
+          // 네 개의 항목들(상,하,좌,우)을 처리한다.
+          for (let y = x; y < N - x - 1; y++) {
+            // 현재 칸의 값을 임시 변수에 저장한다.
+            let temp = mat[x][y];
+
+            // 현재 항목 기준 오른쪽 값을 현재 항목 기준 위쪽 칸에 할당한다.
+            mat[x][y] = mat[y][N - 1 - x];
+
+            // 현재 항목 기준 아래쪽 값을 현재 항목 기준 오른쪽 칸에 할당한다.
+            mat[y][N - 1 - x] = mat[N - 1 - x][N - 1 - y];
+
+            // 현재 항목 기준 왼쪽 값을 현재 항목 기준 아래쪽 칸에 할당한다.
+            mat[N - 1 - x][N - 1 - y] = mat[N - 1 - y][x];
+
+            // 임시 변수의 값을 현재 항목 기준 왼쪽 칸에 할당한다.
+            mat[N - 1 - y][x] = temp;
+          }
+        }
+      } // 시간: O(nm), 공간: O(1), m은 행의 길이이고 n은 열의 길이이다. 원래 배열이 수정되므로 공간은 1
+      rotateMatrix90Left(matrix);
+      console.log(matrix);
+    </script>
+  </body>
+</html>
