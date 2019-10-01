@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <style>
+      .answer {
+        margin-top: 1rem;
+      }
+
+      .answer span {
+        display: inline-block;
+        width: 4rem;
+        height: 4rem;
+        line-height: 4rem;
+        font-size: 2rem;
+        border: 1px solid #ddd;
+        text-align: center;
+      }
+
+      .visible {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <input type="text" class="arrCol" />
+    <input type="text" class="arrRow" />
+    <input type="button" value="start" class="start" onclick="spiral()" />
+    <input
+      type="button"
+      value="remove"
+      class="remove visible"
+      onclick="remove()"
+    />
+    <script>
+      function spiral() {
+        const arrCol = Number(document.querySelector(".arrCol").value);
+        const arrRow = Number(document.querySelector(".arrRow").value);
+        const arr = [...Array(arrCol)].map(() => Array(arrRow).fill());
+        let topRow = 0;
+        let leftCol = 0;
+        let btmRow = arrRow - 1;
+        let rightCol = arrCol - 1;
+        let num = 1;
+
+        while (num <= arrRow * arrCol) {
+          for (let col = leftCol; col <= rightCol; col++) {
+            arr[topRow][col] = num++;
+          }
+          topRow++;
+
+          for (let row = topRow; row <= btmRow; row++) {
+            arr[row][rightCol] = num++;
+          }
+          rightCol--;
+
+          for (let col = rightCol; col >= leftCol; col--) {
+            arr[btmRow][col] = num++;
+          }
+          btmRow--;
+
+          for (let row = btmRow; row >= topRow; row--) {
+            arr[row][leftCol] = num++;
+          }
+          leftCol++;
+        }
+
+        const answer = document.createElement("div");
+        answer.setAttribute("class", "answer");
+        document.body.appendChild(answer);
+
+        const elem = document.querySelector(".answer");
+        elem.innerHTML = arr
+          .map(value => value.map(num => `<span> ${num} </span>`).join(""))
+          .join("<br>");
+
+        const start = document.querySelector(".start");
+        const remove = document.querySelector(".remove");
+        start.classList.add("visible");
+        remove.classList.remove("visible");
+      }
+
+      function remove() {
+        const start = document.querySelector(".start");
+        const remove = document.querySelector(".remove");
+        start.classList.remove("visible");
+        remove.classList.add("visible");
+
+        const elem = document.querySelector(".answer");
+        elem.remove();
+      }
+    </script>
+  </body>
+</html>

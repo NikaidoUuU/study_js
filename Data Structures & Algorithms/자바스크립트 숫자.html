@@ -172,6 +172,26 @@
         return uglyNumbers;
       } // O(n log 2 n), isUgly 함수는 maxDivide(숫자, 2)의 시간 복잡도에 의해 제한된다.
       // 따라서 arrayNUglyNumbers는 maxDivide의 시간 복잡도의 n배다.
+
+      function flattenDictionary(dictionary) {
+        let flattenDictionary = {};
+
+        function flattenDictionaryHelper(dictionary, propName) {
+          if (typeof dictionary !== "object") {
+            flattenDictionary[propName] = dictionary;
+            return;
+          }
+          for (let prop in flattenDictionary) {
+            if (propName === "") {
+              flattenDictionaryHelper(dictionary[prop], propName + prop);
+            } else {
+            }
+          }
+        }
+
+        flattenDictionaryHelper(dictionary, "");
+        return flattenDictionary;
+      }
     </script>
   </body>
 </html>

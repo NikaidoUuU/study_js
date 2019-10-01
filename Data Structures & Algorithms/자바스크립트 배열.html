@@ -138,49 +138,6 @@
 
       /* --------------------------------- 퀴즈 --------------------------------- */
 
-      // 행렬을 이용해 나선형으로 출력
-      // 왼쪽에서 오른쪽 -> 위에서 아래쪽 -> 오른쪽에서 왼쪽 -> 아래쪾에서 위쪽 -> 위 4가지 연산에 제한 걸기
-      const M = [
-        [1, 2, 3, 4, 5],
-        [6, 7, 8, 9, 10],
-        [11, 12, 13, 14, 15],
-        [16, 17, 18, 19, 20]
-      ];
-      function spiralPrint(M) {
-        let topRow = 0;
-        let leftCol = 0;
-        let btmRow = M.length - 1;
-        let rightCol = M[0].length - 1;
-
-        while (topRow < btmRow && leftCol < rightCol) {
-          for (let col = 0; col <= rightCol; col++) {
-            console.log(M[topRow][col]);
-          }
-          topRow++;
-          for (let row = topRow; row <= btmRow; row++) {
-            console.log(M[row][rightCol]);
-          }
-          rightCol--;
-          if (topRow <= btmRow) {
-            for (
-              let col = rightCol;
-              topRow >= btmRow ? col > 0 : col >= 0;
-              col--
-            ) {
-              console.log(M[btmRow][col]);
-            }
-            btmRow--;
-          }
-          if (leftCol <= rightCol) {
-            for (let row = btmRow; row > topRow; row--) {
-              console.log(M[row][leftCol]);
-            }
-            leftCol++;
-          }
-        }
-      } // 시간 O(mn), 공간(1), m은 열의 개수이고 n은 행의 개수다. 행렬의 각 항목을 단 한번만 방문하기 때문
-      spiralPrint(M);
-
       // 틱택토, 판을 나타내는 행렬이 있을 때, 누군가 게임을 이겼는지 비겼는지 혹은 게임이 아직 끝나지 않았는지 결정해야 함
       function checkRow(rowArr, letter) {
         for (let i = 0; i < 3; i++) {
