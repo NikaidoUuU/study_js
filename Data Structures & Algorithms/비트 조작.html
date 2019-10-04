@@ -1,0 +1,87 @@
+<html>
+  <body>
+    <script>
+      // &, AND, 두 비트 모두 1일 때 1
+      // |, OR, 두 비트 중 한 비트라도 1이면 1
+      // ~, NOT, 모든 비트를 뒤집는다.
+      // ^, XOR, 두 비트 중 한 비트만 1인 경우에만 1
+
+      // <<, 왼쪽으로 이동하고 넘치는 비트는 버린다.
+      // >>, 오른쪽으로 이동하고 넘치는 비트는 버린다.
+      // >>>, 오른쪽으로 이동하고 넘치는 비트는 버리고 부호 비트는 0이 된다.
+
+      // 덧셈: 두 수를 더한 다음 10을 초과하면 1을 다음 수에 올린다.
+      function BitwiseAdd(a, b) {
+        while (b != 0) {
+          const carry = a & b;
+          a = a ^ b;
+          b = carry << 1;
+        }
+        return a;
+      }
+      console.log(BitwiseAdd(4, 5)); // 9
+
+      // 뺄셈: 음수를 더하는 것
+      const BitwiseNegate = a => BitwiseAdd(~a, 1);
+      console.log(BitwiseNegate(9)); // -9
+
+      const BitwiseSubtract = (a, b) => BitwiseAdd(a, BitwiseNegate(b));
+      console.log(BitwiseSubtract(5, 4)); // 1
+
+      // 곱셈: 두 수를 곱한 다음, 10이 넘는 수는 다음 자릿수로 올리고
+      // 다음 자릿수로 이동해 해당 자릿수의 수를 곱함
+      function BitwiseMultiply(a, b) {
+        let m = 1;
+        let c = 0;
+
+        if (a < 0) {
+          a = BitwiseNegate(a);
+          b = BitwiseNegate(b);
+        }
+
+        while (a >= m && b) {
+          if (a & m) {
+            c = BitwiseAdd(b, c);
+          }
+          b = b << 1;
+          m = m << 1;
+        }
+        return c;
+      }
+      console.log(BitwiseMultiply(4, 5)); // 20
+
+      // 나눗셈: a/b일 때 a로부터 b를 여러 번 빼는 것
+      // 음수의 경우 도움 함수를 사용해 다시 음수로 변환
+      function BitwiseDivide(a, b) {
+        var c = 0,
+          isNegative = 0;
+
+        if (a < 0) {
+          a = BitwiseNegate(a);
+          isNegative = !isNegative;
+        }
+
+        if (b < 0) {
+          b = BitwiseNegate(b);
+          isNegative = !isNegative;
+        }
+
+        if (b != 0) {
+          while (a >= b) {
+            a = BitwiseSubtract(a, b);
+            c++;
+          }
+        }
+
+        if (isNegative) {
+          c = BitwiseNegate(c);
+        }
+
+        return c;
+      }
+
+      console.log(BitwiseDivide(10, 2)); // 5
+      console.log(BitwiseDivide(-10, 2)); // -5
+    </script>
+  </body>
+</html>
