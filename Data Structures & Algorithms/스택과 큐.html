@@ -1,0 +1,251 @@
+<html>
+  <body>
+    <script>
+      // 스택은 마지막에 삽입된 항목만을 제거하고 접근할 수 있다. (후입선출)
+      class Stack {
+        constructor(array = []) {
+          this.array = array;
+        }
+
+        getBuffer() {
+          return this.array.slice();
+        }
+
+        isEmpty() {
+          return this.array.length === 0;
+        }
+
+        peek() {
+          return this.array[this.array.length - 1];
+        }
+
+        push(value) {
+          return this.array.push(value);
+        }
+
+        pop() {
+          return this.array.pop();
+        }
+      }
+
+      function stackAccessNthTopNode(stack, n) {
+        if (n <= 0) throw "error";
+
+        const bufferArray = stack.getBuffer();
+        const bufferStack = new Stack(bufferArray);
+
+        while (--n !== 0) {
+          bufferStack.pop();
+        }
+        return bufferStack.pop();
+      } // O(n)
+
+      function stackSearch(stack, element) {
+        const bufferArray = stack.getBuffer();
+        const bufferStack = new Stack(bufferArray);
+
+        while (!bufferStack.isEmpty()) {
+          if (bufferStack.pop() === element) {
+            return true;
+          }
+        }
+
+        return false;
+      } // O(n)
+
+      const stack1 = new Stack();
+      console.log(stack1);
+
+      // 큐는 스택과 달리 첫 번째로 추가된 항목만을 제거할 수 있다. (선입선출)
+      class Queue {
+        constructor(array = []) {
+          this.array = array;
+        }
+
+        getBuffer() {
+          return this.array.slice();
+        }
+
+        isEmpty() {
+          return this.array.length === 0;
+        }
+
+        peek() {
+          return this.array[0];
+        }
+
+        enqueue(value) {
+          return this.array.push(value);
+        }
+
+        dequeue() {
+          return this.array.shift();
+        } // O(n), 연결리스트 구현을 사용할 경우 O(1)로 개선 가능
+      }
+
+      function queueAccessNthTopNode(queue, n) {
+        if (n <= 0) throw "error";
+
+        const bufferArray = queue.getBuffer();
+        const bufferQueue = new Queue(bufferArray);
+
+        while (--n !== 0) {
+          bufferQueue.dequeue();
+        }
+        return bufferQueue.dequeue();
+      } // O(n)
+
+      function queueSearch(queue, element) {
+        const bufferArray = queue.getBuffer();
+        const bufferQueue = new Queue(bufferArray);
+
+        while (!bufferQueue.isEmpty()) {
+          if (bufferQueue.dequeue() === element) {
+            return true;
+          }
+        }
+
+        return false;
+      } // O(n)
+
+      const queue1 = new Queue();
+      console.log(queue1);
+
+      /* --------------------------------- 퀴즈 --------------------------------- */
+
+      // 2개의 스택을 사용해 큐 구현하기
+      // 큐는 dequeue() 메서드를 통해 첫 번째로 추가된 항목을 반환하는 자료구조다.
+      // 스택은 pop() 메서드를 통해 마지막으로 추가된 항목을 반환하는 자료구조다. 즉 반대 방향으로 항목들을 제거한다.
+      // 순서를 뒤집기 위해서는 모든 항목들을 두 번째 스택에 삽입(push)한 다음
+      // 두 번째 스택에서 항목들을 꺼내야(pop)할 것이다.
+      class TwoStackQueue {
+        constructor() {
+          this.inbox = new Stack();
+          this.outbox = new Stack();
+        }
+
+        enqueue(value) {
+          this.inbox.push(value);
+        }
+
+        dequeue() {
+          if (this.outbox.isEmpty()) {
+            while (!this.inbox.isEmpty()) {
+              this.outbox.push(this.inbox.pop());
+            }
+          }
+          return this.outbox.pop();
+        }
+      }
+      const queue2 = new TwoStackQueue();
+
+      // 2개의 큐를 사용해 스택 구현하기
+      class QueueStack {
+        constructor() {
+          this.inbox = new Queue(); // 첫 번째 스택
+        }
+
+        push(value) {
+          this.inbox.enqueue(value);
+        }
+
+        pop() {
+          const size = this.inbox.array.length - 1;
+          const bufferQueue = new Queue();
+          let counter = 0;
+
+          while (++counter <= size) {
+            bufferQueue.enqueue(this.inbox.dequeue());
+          }
+          const popped = this.inbox.dequeue();
+          this.inbox = bufferQueue;
+          return popped;
+        }
+      }
+      const stack2 = new QueueStack();
+
+      // 고객 객체를 매개변수로 받아서 선입선출 방식으로 음식 주문을 처리하는 점원 클래스
+      // 요구사항 1. 점원은 주문을 위해 고객의 이름과 주문 항목을 요구한다.
+      // 요구사항 2. 첫 번째로 주문받은 고객을 먼저 처리한다.
+      // addOrder(customer): deliverOrder()에 의해 고객 객체가 처리되도록 고객 객체를 삽입(enqueue)한다.
+      // deliverOrder(): 다음으로 처리될 고객의 이름과 주문 항목을 출력한다.
+      class Customer {
+        constructor(name, order) {
+          this.name = name;
+          this.order = order;
+        }
+      }
+
+      class Cashier {
+        constructor() {
+          this.customers = new Queue();
+        }
+
+        addOrder(customer) {
+          this.customers.enqueue(customer);
+        }
+
+        deliverOrder() {
+          const finishedCustomer = this.customers.dequeue();
+          console.log(
+            `${finishedCustomer.name}, your ${finishedCustomer.order} is ready!`
+          );
+        }
+      }
+
+      const cashier = new Cashier();
+      const customer1 = new Customer("Jim", "Fries");
+      const customer2 = new Customer("Sammie", "Burger");
+      const customer3 = new Customer("Peter", "Drink");
+
+      cashier.addOrder(customer1);
+      cashier.addOrder(customer2);
+      cashier.addOrder(customer3);
+
+      cashier.deliverOrder();
+      cashier.deliverOrder();
+      cashier.deliverOrder();
+
+      // 스택을 사용해 괄호 검증기 설계하기
+      // ((()))는 유효한 괄호 집합이다. 반면 ((()와 ))는 유효한 괄호 집합이 아니다.
+      // 왼쪽 괄호를 저장한 다음 오른쪽 괄호를 발견했을 때 push와 pop을 사용해 괄호의 유효성을 검증할 수 있다.
+      // 오른쪽 괄호를 다 발견한 이후에도 스택에 남아 있는 항목이 있다면 해당 괄호 집합은 유효하지 않은 것이다.
+      // 반대로 오른쪽 괄호를 발견했는데도 스택에 남아 있는 왼쪽 괄호가 없는 경우에도 유효하지 않다.
+      function isParenthesisValid(validationString) {
+        const stack = new Stack();
+        for (let pos = 0; pos < validationString.length; pos++) {
+          const currentChar = validationString.charAt(pos);
+          if (currentChar === "(") {
+            stack.push(currentChar);
+          } else if (currentChar === ")") {
+            if (stack.isEmpty()) {
+              return false;
+            }
+            stack.pop();
+          }
+        }
+        return stack.isEmpty();
+      } // O(n)
+
+      isParenthesisValid("((()"); // false;
+      isParenthesisValid("((()))"); // true;
+      isParenthesisValid("()()"); // true;
+
+      function isParenthesisValid(valdationString) {
+        const arr = [];
+        for (let pos = 0; pos < validationString; pos++) {
+          const currentChar = validationString.charAt(pos);
+          if (currentChar === "(") {
+            arr.push(currentChar);
+          } else if (currentChar === ")") {
+            if (arr.length === 0) {
+              return false;
+            }
+            arr.pop();
+          }
+        }
+        return arr.length === 0;
+      }
+    </script>
+  </body>
+</html>
