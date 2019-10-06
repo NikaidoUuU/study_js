@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Calculator</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        min-height: 100%;
+        box-sizing: border-box;
+      }
+
+      .calculation {
+        margin-top: 1rem;
+        margin-left: 1rem;
+      }
+
+      .result {
+        color: dodgerblue;
+      }
+
+      .calculator {
+        display: grid;
+        width: 12rem;
+        text-align: center;
+        line-height: 3rem;
+        grid-template: repeat(4, 3rem) / repeat(4, 1fr);
+        background: #ddd;
+        margin-top: 1rem;
+        margin-left: 1rem;
+        border-top: 1px solid black;
+        border-left: 1px solid black;
+      }
+
+      .calc__button {
+        border-bottom: 1px solid black;
+        border-right: 1px solid black;
+      }
+
+      .calc__button:nth-child(13) {
+        grid-column: 1/3;
+      }
+    </style>
+  </head>
+  <body>
+    <input class="calculation" type="text" />
+    <span class="result"></span>
+    <div class="calculator">
+      <div class="calc__button">7</div>
+      <div class="calc__button">8</div>
+      <div class="calc__button">9</div>
+      <div class="calc__button">+</div>
+      <div class="calc__button">4</div>
+      <div class="calc__button">5</div>
+      <div class="calc__button">6</div>
+      <div class="calc__button">-</div>
+      <div class="calc__button">1</div>
+      <div class="calc__button">2</div>
+      <div class="calc__button">3</div>
+      <div class="calc__button">x</div>
+      <div class="calc__button">0</div>
+      <div class="calc__button">.</div>
+      <div class="calc__button">/</div>
+    </div>
+    <script>
+      /* Todo: 디자인 개선, 키 추가, eval() 정규식으로 바꾸기 */
+      const calculation = document.querySelector(".calculation");
+      const calculator = document.querySelector(".calculator");
+      const result = document.querySelector(".result");
+
+      function keypressHandler(event) {
+        console.log(event);
+        if (event.key === "Enter") {
+          result.textContent = eval(calculation.value);
+        }
+      }
+
+      function clickHandler(event) {
+        calculation.value +=
+          event.target.textContent === "x" ? "*" : event.target.textContent;
+      }
+
+      calculation.addEventListener("keypress", keypressHandler);
+      calculator.addEventListener("click", clickHandler);
+    </script>
+  </body>
+</html>

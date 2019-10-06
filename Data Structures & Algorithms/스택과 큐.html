@@ -230,22 +230,6 @@
       isParenthesisValid("((()"); // false;
       isParenthesisValid("((()))"); // true;
       isParenthesisValid("()()"); // true;
-
-      function isParenthesisValid(valdationString) {
-        const arr = [];
-        for (let pos = 0; pos < validationString; pos++) {
-          const currentChar = validationString.charAt(pos);
-          if (currentChar === "(") {
-            arr.push(currentChar);
-          } else if (currentChar === ")") {
-            if (arr.length === 0) {
-              return false;
-            }
-            arr.pop();
-          }
-        }
-        return arr.length === 0;
-      }
     </script>
   </body>
 </html>
