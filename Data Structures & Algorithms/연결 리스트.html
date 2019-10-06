@@ -1,0 +1,232 @@
+<html>
+  <body>
+    <script>
+      // 연결 리스트(linked list)란 각 노드가 다른 노드를 가리키는 자료 구조
+      // 고정된 크기를 갖는 배열과 달리 연결 리스트는 런타임에 메모리를 할당하거나 해제할 수 있는 동적 자료 구조다.
+
+      // 단일 연결 리스트: 객체1 - 객체2 -> 객체3 -> 객체4 -> null , 각 노드가 다음 노드에 대한 참조를 갖는다.
+      // 단일 연결 리스트의 노드에는 date와 next라는 속성이 있다.
+      // data는 연결 리스트 노드의 값을 저장하고
+      // next는 단일 연결 리스트 노드의 다른 인스턴스에 대한 포인터를 저장한다.
+      // 연결 리스트의 시작을 헤드라고 부른다. 어떤 항목도 삽입되기 전에 기본 값은 null이다.
+
+      class SinglyLinkedListNode {
+        constructor(data) {
+          this.data = data;
+          this.next = null;
+        }
+      }
+
+      class SinglyLinkedList {
+        constructor() {
+          this.head = null;
+          this.size = 0;
+        }
+
+        isEmpty() {
+          return this.size === 0;
+        }
+
+        insert(value) {
+          if (this.head === null) {
+            this.head = new SinglyLinkedListNode(value);
+          } else {
+            const temp = this.head;
+            this.head = new SinglyLinkedListNode(value);
+            this.head.next = temp;
+          }
+          this.size++;
+        }
+
+        remove(value) {
+          let currentHead = this.head;
+          if (currentHead.data === value) {
+            // 현재 헤드가 삭제하고자 하는 값을 갖고 있기 때문에 바로 삭제
+            this.head = currentHead.next;
+            this.size--;
+          } else {
+            let prev = currentHead;
+            while (currentHead.next) {
+              if (currentHead.data === value) {
+                // 해당 노드를 건너뛰어 삭제한다.
+                prev.next = currentHead.next;
+                prev = currentHead;
+                currentHead = currentHead.next;
+                break;
+              }
+              prev = currentHead;
+              currentHead = currentHead.next;
+            }
+            // 삭제하고자 하는 노드가 중간에도 없고 헤드에도 없다면 테일에 있을 것이다.
+            if (currentHead.data === value) {
+              prev.next = null;
+            }
+            this.size--;
+          }
+        } // O(n)
+
+        deleteAtHead() {
+          let toReturn = null;
+
+          if (this.head !== null) {
+            toReturn = this.head.data;
+            this.head = this.head.next;
+            this.size--;
+          }
+          return toReturn;
+        }
+
+        find(value) {
+          let currentHead = this.head;
+          while (currentHead.next) {
+            if (currentHead.data === value) {
+              return true;
+            }
+            currentHead = currentHead.next;
+          }
+          if (currentHead.data === value) {
+            return true;
+          }
+          return false;
+        } // O(n)
+      }
+
+      const sll1 = new SinglyLinkedList();
+      sll1.insert(1);
+      sll1.insert(12);
+      sll1.insert(20);
+      sll1.remove(12);
+
+      // 이중 연결 리스트를 양방향 단일 연결 리스트라고 생각해도 좋다.
+      // 각 노드에는 next 포인터와 prev 포인터가 있다.
+      class DoublyLinkedListNode {
+        constructor(data) {
+          this.data = data;
+          this.next = null;
+          this.prev = null;
+        }
+      }
+
+      // 추가로 이중 연결 리스트에는 헤드 포인터와 테일 포인터가 있다.
+      // 헤드는 이중 연결리스트의 시작, 테일은 이중 연결 리스트의 끝을 나타낸다.
+      class DoublyLinkedList {
+        constructor() {
+          this.head = null;
+          this.tail = null;
+          this.size = 0;
+        }
+
+        isEmpty() {
+          return this.size === 0;
+        }
+
+        insertAtHead(value) {
+          if (this.head === null) {
+            this.head = new DoublyLinkedListNode(value);
+            this.tail = this.head;
+          } else {
+            const temp = new DoublyLinkedListNode(value);
+            temp.next = this.head;
+            this.head.prev = temp;
+            this.head = temp;
+          }
+          this.size++;
+        }
+
+        insertAtTail(value) {
+          if (this.tail === null) {
+            this.tail = new DoublyLinkedListNode(value);
+            this.head = this.tail;
+          } else {
+            const temp = new DoublyLinkedListNode(value);
+            temp.prev = this.tail;
+            this.tail.next = temp;
+            this.tail = temp;
+          }
+          this.size++;
+        }
+
+        deleteAtHead() {
+          let toReturn = null;
+          if (this.head !== null) {
+            toReturn = this.head.data;
+
+            if (this.head === this.tail) {
+              this.head = null;
+              this.tail = null;
+            } else {
+              this.head = this.head.next;
+              this.head.prev = null;
+            }
+          }
+          this.size--;
+          return toReturn;
+        }
+
+        deleteAtTail() {
+          let toReturn = null;
+
+          if (this.tail !== null) {
+            toReturn = this.tail.data;
+
+            if (this.head === this.tail) {
+              this.head = null;
+              this.tail = null;
+            } else {
+              this.tail = this.tail.prev;
+              this.tail.next = null;
+            }
+          }
+          this.size--;
+          return toReturn;
+        }
+
+        findStartingHead(value) {
+          let currentHead = this.head;
+          while (currentHead.next) {
+            if (currentHead.data === value) {
+              return true;
+            }
+            currentHead = currentHead.next;
+          }
+          return false;
+        } // O(n)
+
+        findStartingTail(value) {
+          let currentTail = this.tail;
+          while (currentTail.prev) {
+            if (currentTail.data === value) {
+              return true;
+            }
+            currentTail = currentTail.prev;
+          }
+          return false;
+        } // O(n)
+      }
+
+      // 연결 리스트에서 중복된 항목 제거하기
+      function deleteDuplicateInUnsortedSll(sll) {
+        const track = {};
+        let temp = sll.head;
+        let prev = null;
+        while (temp) {
+          if (track[temp.data]) {
+            prev.next = temp.next;
+            sll.size--;
+          } else {
+            track[temp.data] = true;
+            prev = temp;
+          }
+          temp = temp.next;
+        }
+      }
+
+      const dll2 = new DoublyLinkedList();
+      dll2.insertAtHead(10);
+      dll2.insertAtHead(12);
+      dll2.insertAtHead(20);
+      dll2.insertAtHead(10);
+      dll2.insertAtTail(3333);
+    </script>
+  </body>
+</html>

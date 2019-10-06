@@ -9,13 +9,13 @@
       body {
         font-size: 3rem;
       }
-      h1 {
-        background: #fff000;
-      }
+
       .menu {
         display: flex;
+        flex-direction: column;
         background: yellowgreen;
       }
+
       .menu-link {
         margin: 0.1em;
         padding: 0.3em;
@@ -24,24 +24,21 @@
         background: dodgerblue;
         list-style: none;
       }
+
       .menu-active {
         background: orange;
       }
     </style>
   </head>
   <body>
-    <h1 id="main-title">
-      Event
-    </h1>
-
     <nav class="menu">
-      <a href="#" class="menu-link" data-menu="1">menu 1</a>
-      <a href="#" class="menu-link" data-menu="2">menu 2</a>
-      <a href="#" class="menu-link" data-menu="3">menu 3</a>
+      <a href="#" class="menu-link">menu 1</a>
+      <a href="#" class="menu-link">menu 2</a>
+      <a href="#" class="menu-link">menu 3</a>
     </nav>
 
     <script>
-      // let currentMenu; // 현재 활성화된 메뉴를 담을 변수
+      // let currentMenu;
       // const menuLinks = document.querySelectorAll(".menu-link");
 
       // function clickMenuHandler() {
