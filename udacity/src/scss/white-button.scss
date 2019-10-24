@@ -1,0 +1,17 @@
+@mixin white-button($width-padding) {
+  cursor: pointer;
+  border: 1px solid #02b3e4;
+  border-radius: 4px;
+  font-size: 13px;
+  padding: 1rem $width-padding;
+  color: #02b3e4;
+  background-color: white;
+  letter-spacing: 2px;
+  box-shadow: 8px 10px 20px 0px rgba(46, 61, 73, 0.15);
+  &:hover {
+    background-color: #f1f3f5;
+    box-shadow: 5px 5px 5px 0px rgba(46, 61, 73, 0.15);
+    color: #00c8ff;
+  }
+  transition: 0.5s;
+}
