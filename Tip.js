@@ -11,6 +11,18 @@ const user = getUser(true);
 console.log(user); // { name: "John", surname: "Doe", email: "john@doe.com" }
 /* ----------------------------------------------------------------------------- */
 
+/* optional chaining, @babel/plugin-proposal-optional-chaining 필요함 */
+let data;
+if (
+  myObj &&
+  myObj.firstProp &&
+  myObj.firstProp.secondProp &&
+  myObj.firstProp.secondProp.actualData
+)
+  data = myObj.firstProp.secondProp.actualData;
+
+const data = myObj?.firstProp?.secondProp?.actualData;
+/* ----------------------------------------------------------------------------- */
 function lotate(M, clock = true) {
   const arr = [...Array(M.length)].map(() => Array(M[0].length).fill());
   for (let col = 0; col < M.length; col++) {
