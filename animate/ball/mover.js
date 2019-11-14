@@ -27,6 +27,8 @@ class Mover {
   }
 
   set setColor(newColor) {
+    this.elem.classList.remove(`mover-${this.color}`);
+    this.elem.classList.add(`mover-${newColor}`);
     this.color = newColor;
     this.elem.style.background = newColor;
   }
@@ -40,5 +42,9 @@ class FastMover extends Mover {
   constructor(color) {
     super(color);
     this.elem.style.transitionDuration = "0.3s";
+  }
+
+  static sayHello() {
+    console.log("My name is FastMover!");
   }
 }
