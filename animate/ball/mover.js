@@ -34,7 +34,7 @@ class Mover {
   }
 
   static sayHello() {
-    console.log(`My name is Mover!`);
+    console.log("My name is Mover!");
   }
 }
 

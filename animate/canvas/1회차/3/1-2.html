@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <style>
+      .canvas {
+        background: #eee;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>requestAnimationFrame</h1>
+    <canvas class="canvas" width="500" height="300"> </canvas>
+
+    <script>
+      const canvas = document.querySelector(".canvas");
+      const context = canvas.getContext("2d");
+      let xPos = 0;
+      let xPos2 = 0;
+      let count;
+
+      function draw() {
+        // 0.5초
+        if (count % 30 === 0) {
+          if (xPos > canvas.width - 10) xPos = 0;
+          context.clearRect(0, 140, canvas.width, 20);
+          context.beginPath();
+          context.arc(xPos, 150, 10, 0, Math.PI * 2, false);
+          context.fill();
+          xPos += 5;
+        }
+
+        // 0.1666초
+        if (count % 10 === 0) {
+          if (xPos2 > canvas.width - 30) xPos2 = 0;
+          context.clearRect(0, 20, canvas.width, 60);
+          context.beginPath();
+          context.arc(xPos2, 50, 30, 0, Math.PI * 2, false);
+          context.fill();
+          xPos2 += 5;
+        }
+
+        count = requestAnimationFrame(draw);
+        // if (xPos >= canvas.width - 10) {
+        //   cancelAnimationFrame(count);
+        // }
+      }
+
+      draw();
+
+      canvas.addEventListener("click", () => {
+        cancelAnimationFrame(count);
+      });
+    </script>
+  </body>
+</html>

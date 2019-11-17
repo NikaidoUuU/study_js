@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <style>
+      canvas {
+        background: #eee;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Interaction</h1>
+    <canvas class="canvas" width="600" height="400"> </canvas>
+
+    <script>
+      const canvas = document.querySelector(".canvas");
+      const context = canvas.getContext("2d");
+      const boxes = [];
+      const mousePos = { x: 0, y: 0 };
+      let selectedBox; // 클릭된 Box;
+      context.font = "bold 30px sans-serif";
+
+      class Box {
+        constructor(index, x, y, speed) {
+          this.index = index;
+          this.x = x;
+          this.y = y;
+          this.speed = speed;
+          this.width = 100;
+          this.height = 100;
+          this.draw();
+        }
+
+        draw() {
+          context.fillStyle = "rgba(0, 0, 0, 0.5)";
+          context.fillRect(this.x, this.y, this.width, this.height);
+          context.fillStyle = "#fff";
+          context.fillText(this.index, this.x + 30, this.y + 30);
+        }
+      }
+
+      function render() {
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        boxes.forEach(box => {
+          box.x += box.speed;
+          if (box.x > canvas.width) box.x = -box.width;
+          box.draw();
+        });
+
+        requestAnimationFrame(render);
+      }
+
+      for (let i = 0; i < 10; i++) {
+        const tempX = Math.floor(Math.random() * canvas.width * 0.8);
+        const tempY = Math.floor(Math.random() * canvas.height * 0.8);
+        const tempSpeed = Math.floor(Math.random() * 4 + 1);
+        boxes.push(new Box(i, tempX, tempY, tempSpeed));
+      }
+
+      canvas.addEventListener("click", e => {
+        mousePos.x = e.layerX;
+        mousePos.y = e.layerY;
+
+        boxes.forEach(box => {
+          if (
+            mousePos.x > box.x &&
+            mousePos.x < box.x + box.width &&
+            mousePos.y > box.y &&
+            mousePos.y < box.y + box.height
+          ) {
+            selectedBox = box;
+          }
+        });
+      });
+
+      render();
+    </script>
+  </body>
+</html>

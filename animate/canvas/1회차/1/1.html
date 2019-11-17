@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <!-- Canvas: 비트맵(점과 점 사이)
+    SVG: 벡터(크기가 커져됴 용량이 늘어나지 않음) -->
+  </head>
+  <body>
+    <canvas>이 브라우저는 캔버스를 지원하지 않습니다.</canvas>
+
+    <script>
+      const canvas = document.querySelector("canvas");
+      if (canvas.getContext) {
+        console.log("캔버스 지원");
+      }
+    </script>
+  </body>
+</html>
