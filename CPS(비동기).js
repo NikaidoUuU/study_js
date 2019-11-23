@@ -243,3 +243,198 @@ const render = async function(...aIters) {
 
 render(START, urls("1.json", "2.json"), url("3.json"), END);
 /* ----------------------------------------------------------------------------- */
+
+/* DataPass */
+
+// 추상화: 보다 덜 변하면 추상화 대상
+// const dataLoader = async function*(...aIters) {
+//   const dataPass = new DataPass();
+//   for (const item of aIters) {
+//     const v = await item.load(dataPass.data).next();
+//     yield (dataPass.data = v.value); // v.value 리턴
+//   }
+// };
+
+// const render = async function(...aIters) {
+//   for await (const json of dataLoader(...aIters)) {
+//     console.log(json);
+//   }
+// };
+
+const DataPass = class {
+  get data() {
+    throw "override";
+  }
+  set data(v) {
+    throw "override";
+  }
+};
+
+const PrevPass = class extends DataPass {
+  #data;
+  get data() {
+    return this.#data;
+  }
+  set data(v) {
+    this.#data = v;
+  }
+};
+
+const IncPass = class extends DataPass {
+  #data = [];
+  get data() {
+    return this.#data;
+  }
+  set data(v) {
+    this.#data.push(v);
+  }
+};
+
+const dataLoader = async function*(pass, ...aIters) {
+  const dataPass = new pass();
+  for (const item of aIters) {
+    const v = await item.load(dataPass.data).next();
+    yield (dataPass.data = v.value);
+  }
+};
+
+const render = async function(...aIters) {
+  for await (const json of dataLoader(PrevPass, ...aIters)) {
+    console.log(json);
+  }
+};
+
+/* Async Item */
+const AsyncItem = class {
+  static #dataPass;
+  static #items;
+  static iterable(dataPass, ...items) {
+    AsyncItem.#dataPass = dataPass;
+    AsyncItem.#items = items;
+    return AsyncItem;
+  }
+  static async *[Symbol.asyncIterator]() {
+    const dataPass = new AsyncItem.#dataPass();
+    for (const item of AsyncItem.#items) {
+      const v = await item.load(dataPass.data).next();
+      yield (dataPass.data = v.value);
+    }
+  }
+  static toPromises(items, data) {
+    return [...items].map(item => item.load(data).next());
+  }
+  async *load(v) {
+    throw "override";
+  }
+};
+
+// const render = async function(...aIters) {
+//   for await (const json of AsyncItem.iterable(PrevPass, ...aIters)) {
+//     console.log(json);
+//   }
+// };
+
+/* Renderer */
+const Renderer = class {
+  #dataPass;
+  constructor(dataPass) {
+    this.dataPass = dataPass;
+  }
+  set dataPass(v) {
+    this.#dataPass = v;
+  }
+  async render(...items) {
+    const iter = AsyncItem.iterable(this.#dataPass, ...items);
+    for await (const v of iter) console.log("**", v);
+  }
+};
+
+const renderer = new Renderer(PrevPass);
+// renderer.render(....)
+
+/* Url */
+const Url = class extends AsyncItem {
+  #url;
+  #opt;
+  #dataF;
+  constructor(u, opt, dataF = JSON.stringify) {
+    super();
+    this.#url = u;
+    this.#opt = opt;
+    this.#dataF = dataF;
+  }
+  async *load(v) {
+    if (v) this.#opt.body = this.#dataF(v);
+    return await (await fetch(this.#url, this.#opt)).json();
+  }
+};
+
+/* Urls */
+const Parallel = class extends AsyncItem {
+  #items;
+  constructor(...items) {
+    super();
+    this.#items = items;
+  }
+  async *load(data) {
+    const arr = AsyncItem.toPromises(this.#items, data);
+    return (await Promise.all(arr)).map(v => v.value);
+  }
+};
+
+const Race = class extends AsyncItem {
+  #items;
+  constructor(...items) {
+    super();
+    this.#items = items;
+  }
+  async *load(data) {
+    return (await Promise.race(AsyncItem.toPromises(this.#items, data))).value;
+  }
+};
+
+/* timeout */
+const Timeout = class extends AsyncItem {
+  static get = (time, msg = "timeout") => new Timeout(time, msg);
+  #timeout;
+  constructor(time, msg) {
+    super();
+    this.#timeout = r => setTimeout(() => r(msg), time);
+  }
+  async *load(v) {
+    yield await new Promise(this.#timeout);
+  }
+};
+
+/* url timeout */
+const Url = class extends AsyncItem {
+  static get = (u, timeout = 0, opt = { method: "GET" }) =>
+    timeout > 0
+      ? new Race(new Url(u, opt), Timeout.get(timeout))
+      : new Url(u, opt);
+  static post = (u, timeout, opt = {}) => {
+    opt.method = "POST";
+    return Url.get(u, timeout, opt);
+  };
+  static urls = (...urls) => Parallel.get(Url.get, ...urls);
+  #url;
+  #opt;
+  #dataF;
+  constructor(u, opt, dataF = JSON.stringify) {
+    super();
+    this.#url = u;
+    this.#opt = opt;
+    this.#dataF = dataF;
+  }
+  async *load(v) {
+    if (v) this.#opt.body = this.#dataF(v);
+    return await (await fetch(this.#url, this.#opt)).json();
+  }
+};
+
+const renderer = new Renderer(PrevPass);
+renderer.render(
+  Url.urls("1.json", "2.json"),
+  Timeout.get(100),
+  Url.get("3.json", 1000)
+);
