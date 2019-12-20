@@ -1,0 +1,195 @@
+<html>
+  <body>
+    <script>
+      // 트리 자료 구조는 자식 노드를 지닌 노드들로 구성된다. (첫 번째이자 가장 상위 노드는 root node라고 부른다.)
+      // 이진 트리는 자식 노드가 왼쪽, 오른쪽 두 개뿐인 트리다.
+      class BinaryTree {
+        constructor() {
+          this._root = null;
+        }
+      }
+
+      class BinaryTreeNode {
+        constructor(value) {
+          this.value = value;
+          this.left = null;
+          this.right = null;
+        }
+      }
+
+      // 선순회 순회[DFS]는 루트(현재 노드), 왼쪽, 오른쪽순으로 노드를 방문한다.
+      // 이는 재귀적으로 쉽게 구현할 수 있다. 기저 조건은 노드가 null일 때 종료된다.
+      // 노드가 null이 아니면 노드 값을 출력한다. 그런 다음 왼쪽 자식에 대해 재귀함수를 호출하고 오른쪽 자식에 대해 재귀함수를 호출한다.
+      //   class BinaryTree {
+      //     constructor() {
+      //       this._root = null;
+      //     }
+
+      //     traversePreOrder() {
+      //       (function traversePreOrderHelper(node) {
+      //         if (!node) return;
+      //         console.log(node.value);
+      //         traversePreOrderHelper(node.left);
+      //         traversePreOrderHelper(node.right);
+      //       })(this._root);
+      //     }
+      //   }
+
+      // 중순위 순회는 왼쪽, 루트(현재 노드), 오른쪽순으로 노드를 방문한다.
+      //   class BinaryTree {
+      //     constructor() {
+      //       this._root = null;
+      //     }
+
+      //     traverseInOrder() {
+      //       (function traverseInOrderHelper(node) {
+      //         if (!node) return;
+      //         traverseInOrderHelper(node.left);
+      //         console.log(node.value);
+      //         traverseInOrderHelper(node.right);
+      //       })(this._root);
+      //     }
+      //   }
+
+      // 후순위 순회는 왼쪽, 오른쪽, 루트 (현재 노드)순으로 노드를 방문한다.
+      //   class BinaryTree {
+      //     constructor() {
+      //       this._root = null;
+      //     }
+
+      //     traversePostOrder() {
+      //       (function traversePostOrderHelper(node) {
+      //         if (node.left) traversePostOrderHelper(node.left);
+      //         if (node.right) traversePostOrderHelper(node.right);
+      //         console.log(node.value);
+      //       })(this._root);
+      //     }
+      //   }
+
+      // 단계순위 순회[BFS]는 왼쪽 혹은 오른쪽으로 깊게 들어가는 대신에 각 노드 단계를 방문한다.
+      //   class BinaryTree {
+      //     constructor() {
+      //       this._root = null;
+      //     }
+
+      //     traverseLevelOrder() {
+      //       const root = this._root;
+      //       const queue = [];
+
+      //       if (!root) return;
+      //       queue.push(root);
+
+      //       while (queue.length) {
+      //         const temp = queue.shift();
+      //         console.log(temp.value);
+      //         if (temp.left) queue.push(temp.left);
+      //         if (temp.right) queue.push(temp.right);
+      //       }
+      //     }
+      //   }
+
+      // 이진 탐색 트리의 경우 왼쪽 자식이 부모보다 작고 오른쪽 자식이 부모보다 크다.
+      // 삽입, 삭제, 탐색: 균형 O(log n) 불균형 O(n)
+      // 순회 O(n)
+      class BinarySearchTree {
+        constructor() {
+          this.root = null;
+        }
+
+        insert(value) {
+          const newNode = new Node(value);
+
+          if (this.root === null) this.root = newNode;
+          else this.insertNode(this.root, newNode);
+        }
+
+        insertNode(node, newNode) {
+          if (newNode.value < node.value) {
+            if (node.left === null) node.left = newNode;
+            else this.insertNode(node.left, newNode);
+          } else {
+            if (node.right === null) node.right = newNode;
+            else this.insertNode(node.right, newNode);
+          }
+        }
+
+        remove(value) {
+          this.root = this.removeNode(this.root, value);
+        }
+
+        removeNode(node, key) {
+          if (node === null) return null;
+          else if (key < node.value) {
+            node.left = this.removeNode(node.left, key);
+            return node;
+          } else if (key > node.value) {
+            node.right = this.removeNode(node.right, key);
+            return node;
+          } else {
+            if (node.left === null && node.right === null) {
+              node = null;
+              return node;
+            }
+
+            if (node.left === null) {
+              node = node.right;
+              return node;
+            }
+
+            if (node.right === null) {
+              node = node.left;
+              return node;
+            }
+
+            const temp = this.findMinNode(node.right);
+            node.value = temp.value;
+            node.right = this.removeNode(node.right, temp.value);
+            return node;
+          }
+        }
+
+        findMinNode(node) {
+          if (node.left === null) return node;
+          else return this.findMinNode(node.left);
+        }
+
+        search(value, node = this.root) {
+          if (node === null) return null;
+          else if (value < node.value) return this.search(value, node.left);
+          else if (value > node.value) return this.search(value, node.right);
+          else return node;
+        }
+
+        preOrder(node = this.root) {
+          if (node === null) return;
+          console.log(node.value);
+          this.preOrder(node.left);
+          this.preOrder(node.right);
+        }
+
+        levelOrder() {
+          const root = this.root;
+          const queue = [];
+
+          if (root === null) return;
+          queue.push(root);
+
+          while (queue.length) {
+            const temp = queue.shift();
+            console.log(temp.value);
+            if (temp.left) queue.push(temp.left);
+            if (temp.right) queue.push(temp.right);
+          }
+        }
+      }
+
+      class Node {
+        constructor(value) {
+          this.value = value;
+          this.left = null;
+          this.right = null;
+        }
+      }
+    </script>
+  </body>
+</html>
