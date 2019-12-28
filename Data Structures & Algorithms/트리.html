@@ -91,6 +91,14 @@
       // 이진 탐색 트리의 경우 왼쪽 자식이 부모보다 작고 오른쪽 자식이 부모보다 크다.
       // 삽입, 삭제, 탐색: 균형 O(log n) 불균형 O(n)
       // 순회 O(n)
+      class Node {
+        constructor(value) {
+          this.value = value;
+          this.left = null;
+          this.right = null;
+        }
+      }
+
       class BinarySearchTree {
         constructor() {
           this.root = null;
@@ -170,23 +178,13 @@
         levelOrder() {
           if (this.root === null) return;
 
-          const queue = [];
-          queue.push(this.root);
-
+          const queue = [this.root];
           while (queue.length) {
             const temp = queue.shift();
             console.log(temp.value);
             if (temp.left) queue.push(temp.left);
             if (temp.right) queue.push(temp.right);
           }
-        }
-      }
-
-      class Node {
-        constructor(value) {
-          this.value = value;
-          this.left = null;
-          this.right = null;
         }
       }
     </script>
