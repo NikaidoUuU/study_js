@@ -2,12 +2,9 @@
   <body>
     <script>
       const array1 = [1, 2, 3, 4];
-      // .push 메서드의 시간 복잡도는 O(1)이다.
+      // .push, .pop 메서드의 시간 복잡도는 O(1)이다.
       array1.push(5);
-
-      // .pop, .shift 메서드들의 시간 복잡도는 O(1)이다.
-      console.log(array1.pop()); // 5, 제거된 항목을 반환함
-      console.log(array1.shift()); // 1, 제거된 항목을 반환함
+      array1.pop();
 
       // 접근 연산은 인덱스를 사용해 메모리의 주소로부터 직접 값을 얻기 때문에 시간 복잡도는 O(1)이다.
       array1[0];
@@ -122,7 +119,11 @@
         return answer;
       } // 시간: O(kn), 공간: O(n), 여기서 n은 가장 긴 배열의 길이이고 k는 배열의 개수다.
       console.log(
-        commonElements([[1, 5, 5, 10, 20], [3, 4, 5, 5, 10], [5, 5, 10, 20]])
+        commonElements([
+          [1, 5, 5, 10, 20],
+          [3, 4, 5, 5, 10],
+          [5, 5, 10, 20]
+        ])
       ); // [5, 10]
 
       // 자바스크립트에는 다차원 배열이 없다. 대신에 가변 배열(항목이 배열인 배열)이 있다.
@@ -184,7 +185,11 @@
         );
       }
 
-      const board = [["O", "-", "X"], ["-", "O", "-"], ["-", "X", "O"]];
+      const board = [
+        ["O", "-", "X"],
+        ["-", "O", "-"],
+        ["-", "X", "O"]
+      ];
       console.log(ticTacToeWinner(board, "X")); // false
       console.log(ticTacToeWinner(board, "O")); // true
     </script>

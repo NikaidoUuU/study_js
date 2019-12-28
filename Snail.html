@@ -20,7 +20,7 @@
         text-align: center;
       }
 
-      .visible {
+      .hide {
         display: none;
       }
     </style>
@@ -32,7 +32,7 @@
     <input
       type="button"
       value="remove"
-      class="remove visible"
+      class="remove hide"
       onclick="remove()"
     />
     <script>
@@ -70,27 +70,25 @@
 
         const answer = document.createElement("div");
         answer.setAttribute("class", "answer");
-        document.body.appendChild(answer);
-
-        const elem = document.querySelector(".answer");
-        elem.innerHTML = arr
+        answer.innerHTML = arr
           .map(value => value.map(num => `<span> ${num} </span>`).join(""))
           .join("<br>");
+        document.body.appendChild(answer);
 
         const start = document.querySelector(".start");
         const remove = document.querySelector(".remove");
-        start.classList.add("visible");
-        remove.classList.remove("visible");
+        start.classList.add("hide");
+        remove.classList.remove("hide");
       }
 
       function remove() {
         const start = document.querySelector(".start");
         const remove = document.querySelector(".remove");
-        start.classList.remove("visible");
-        remove.classList.add("visible");
+        start.classList.remove("hide");
+        remove.classList.add("hide");
 
-        const elem = document.querySelector(".answer");
-        elem.remove();
+        const answer = document.querySelector(".answer");
+        answer.remove();
       }
     </script>
   </body>

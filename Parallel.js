@@ -164,7 +164,10 @@ const WorkerPromise = f => {
   );
 
   const next = () => {
-    if (!start.next) return;
+    if (!start.next) {
+      end = null;
+      return;
+    }
     ({ data, resolve, reject } = start.next);
     start = start.next;
     worker.postMessage(data);

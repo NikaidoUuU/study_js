@@ -168,11 +168,10 @@
         }
 
         levelOrder() {
-          const root = this.root;
-          const queue = [];
+          if (this.root === null) return;
 
-          if (root === null) return;
-          queue.push(root);
+          const queue = [];
+          queue.push(this.root);
 
           while (queue.length) {
             const temp = queue.shift();
