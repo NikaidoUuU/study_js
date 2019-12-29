@@ -3,16 +3,9 @@
     <script>
       // 연결 리스트(linked list)란 각 노드가 다른 노드를 가리키는 자료 구조
       // 고정된 크기를 갖는 배열과 달리 연결 리스트는 런타임에 메모리를 할당하거나 해제할 수 있는 동적 자료 구조다.
-
-      // 단일 연결 리스트: 객체1 - 객체2 -> 객체3 -> 객체4 -> null , 각 노드가 다음 노드에 대한 참조를 갖는다.
-      // 단일 연결 리스트의 노드에는 date와 next라는 속성이 있다.
-      // data는 연결 리스트 노드의 값을 저장하고
-      // next는 단일 연결 리스트 노드의 다른 인스턴스에 대한 포인터를 저장한다.
-      // 연결 리스트의 시작을 헤드라고 부른다. 어떤 항목도 삽입되기 전에 기본 값은 null이다.
-
-      class SinglyLinkedListNode {
-        constructor(data) {
-          this.data = data;
+      class Node {
+        constructor(value) {
+          this.value = value;
           this.next = null;
         }
       }
@@ -20,213 +13,226 @@
       class SinglyLinkedList {
         constructor() {
           this.head = null;
-          this.size = 0;
+          this.tail = null;
+          this.length = 0;
         }
 
-        isEmpty() {
-          return this.size === 0;
-        }
+        push(value) {
+          const newNode = new Node(value);
 
-        insert(value) {
-          if (this.head === null) {
-            this.head = new SinglyLinkedListNode(value);
+          if (this.length === 0) {
+            this.head = newNode;
+            this.tail = newNode;
           } else {
-            const temp = this.head;
-            this.head = new SinglyLinkedListNode(value);
-            this.head.next = temp;
+            this.tail.next = newNode;
+            this.tail = newNode;
           }
-          this.size++;
-        }
+          this.length++;
+          return this.tail;
+        } // O(1)
 
-        remove(value) {
-          let currentHead = this.head;
-          if (currentHead.data === value) {
-            // 현재 헤드가 삭제하고자 하는 값을 갖고 있기 때문에 바로 삭제
-            this.head = currentHead.next;
-            this.size--;
+        pop() {
+          if (this.length === 0) return;
+
+          const currentTail = this.tail;
+          if (this.length === 1) {
+            this.head = null;
+            this.tail = null;
+            this.length--;
+            return currentTail;
+          }
+
+          const prevTail = this.get(this.length - 2);
+          prevTail.next = null;
+          this.tail = prevTail;
+          this.length--;
+          return currentTail;
+        } // O(N)
+
+        shift() {
+          if (this.length === 0) return;
+          if (this.length === 1) this.tail = null;
+
+          const currentHead = this.head;
+          this.head = this.head.next;
+          this.length--;
+          return currentHead;
+        } // O(1)
+
+        unshift(value) {
+          const newNode = new Node(value);
+
+          if (this.length === 0) {
+            this.head = newNode;
+            this.tail = newNode;
           } else {
-            let prev = currentHead;
-            while (currentHead.next) {
-              if (currentHead.data === value) {
-                // 해당 노드를 건너뛰어 삭제한다.
-                prev.next = currentHead.next;
-                prev = currentHead;
-                currentHead = currentHead.next;
-                break;
-              }
-              prev = currentHead;
-              currentHead = currentHead.next;
-            }
-            // 삭제하고자 하는 노드가 중간에도 없고 헤드에도 없다면 테일에 있을 것이다.
-            if (currentHead.data === value) {
-              prev.next = null;
-            }
-            this.size--;
+            newNode.next = this.head;
+            this.head = newNode;
           }
-        } // O(n)
+          this.length++;
+          return this.head;
+        } // O(1)
 
-        deleteAtHead() {
-          let toReturn = null;
+        get(index) {
+          if (this.length === 0 || this.length <= index) return;
 
-          if (this.head !== null) {
-            toReturn = this.head.data;
-            this.head = this.head.next;
-            this.size--;
-          }
-          return toReturn;
-        }
-
-        find(value) {
           let currentHead = this.head;
-          while (currentHead.next) {
-            if (currentHead.data === value) {
-              return true;
-            }
+          while (index--) {
             currentHead = currentHead.next;
           }
-          if (currentHead.data === value) {
-            return true;
+
+          return currentHead;
+        } // O(N)
+
+        set(index, value) {
+          const node = this.get(index);
+          if (node) {
+            node.value = value;
+            return node;
           }
-          return false;
-        } // O(n)
-      }
+        } // O(N)
 
-      const sll1 = new SinglyLinkedList();
-      sll1.insert(1);
-      sll1.insert(12);
-      sll1.insert(20);
-      sll1.remove(12);
+        insert(index, value) {
+          if (this.length === 0 || this.length < index) return;
+          if (index === 0) return this.unshift(value);
+          if (index === this.length) return this.push(value);
 
-      // 이중 연결 리스트를 양방향 단일 연결 리스트라고 생각해도 좋다.
-      // 각 노드에는 next 포인터와 prev 포인터가 있다.
-      class DoublyLinkedListNode {
-        constructor(data) {
-          this.data = data;
+          const newNode = new Node(value);
+          const prevNode = this.get(index - 1);
+          newNode.next = prevNode.next;
+          prevNode.next = newNode;
+          this.length++;
+          return newNode;
+        } // O(N)
+
+        remove(index) {
+          if (this.length === 0 || this.length <= index) return;
+          if (index === 0) return this.shift();
+          if (index === this.length - 1) return this.pop();
+
+          const prevNode = this.get(index - 1);
+          const toBeRemovedNode = prevNode.next;
+          prevNode.next = toBeRemovedNode.next;
+          toBeRemovedNode.next = null;
+          this.length--;
+          return toBeRemovedNode;
+        }
+      } // O(N)
+
+      // 이중 연결 리스트는 이전 노드도 가르키게 된다.
+      class Node {
+        constructor(value) {
+          this.value = value;
           this.next = null;
           this.prev = null;
         }
       }
 
-      // 추가로 이중 연결 리스트에는 헤드 포인터와 테일 포인터가 있다.
-      // 헤드는 이중 연결리스트의 시작, 테일은 이중 연결 리스트의 끝을 나타낸다.
       class DoublyLinkedList {
         constructor() {
           this.head = null;
           this.tail = null;
-          this.size = 0;
+          this.length = 0;
         }
 
-        isEmpty() {
-          return this.size === 0;
-        }
+        push(value) {
+          const newNode = new Node(value);
 
-        insertAtHead(value) {
-          if (this.head === null) {
-            this.head = new DoublyLinkedListNode(value);
-            this.tail = this.head;
+          if (this.length === 0) {
+            this.head = newNode;
+            this.tail = newNode;
           } else {
-            const temp = new DoublyLinkedListNode(value);
-            temp.next = this.head;
-            this.head.prev = temp;
-            this.head = temp;
+            newNode.prev = this.tail;
+            this.tail.next = newNode;
+            this.tail = newNode;
           }
-          this.size++;
-        }
+          this.length++;
+          return this.tail;
+        } // O(1)
 
-        insertAtTail(value) {
-          if (this.tail === null) {
-            this.tail = new DoublyLinkedListNode(value);
-            this.head = this.tail;
+        pop() {
+          if (this.length === 0) return;
+          if (this.length === 1) this.head = null;
+
+          const currentTail = this.tail;
+          this.tail = this.tail.prev;
+          if (this.tail) this.tail.next = null;
+          this.length--;
+          return currentTail;
+        } // O(1)
+
+        shift() {
+          if (this.length === 0) return;
+          if (this.length === 1) this.tail = null;
+
+          const currentHead = this.head;
+          this.head = this.head.next;
+          if (this.head) this.head.prev = null;
+          this.length--;
+          return currentHead;
+        } // O(1)
+
+        unshift(value) {
+          const newNode = new Node(value);
+
+          if (this.length === 0) {
+            this.head = newNode;
+            this.tail = newNode;
           } else {
-            const temp = new DoublyLinkedListNode(value);
-            temp.prev = this.tail;
-            this.tail.next = temp;
-            this.tail = temp;
+            newNode.next = this.head;
+            this.head.prev = newNode;
+            this.head = newNode;
           }
-          this.size++;
-        }
+          this.length++;
+          return this.head;
+        } // O(1)
 
-        deleteAtHead() {
-          let toReturn = null;
-          if (this.head !== null) {
-            toReturn = this.head.data;
+        get(index) {
+          if (this.length === 0 || this.length <= index) return;
 
-            if (this.head === this.tail) {
-              this.head = null;
-              this.tail = null;
-            } else {
-              this.head = this.head.next;
-              this.head.prev = null;
-            }
-          }
-          this.size--;
-          return toReturn;
-        }
-
-        deleteAtTail() {
-          let toReturn = null;
-
-          if (this.tail !== null) {
-            toReturn = this.tail.data;
-
-            if (this.head === this.tail) {
-              this.head = null;
-              this.tail = null;
-            } else {
-              this.tail = this.tail.prev;
-              this.tail.next = null;
-            }
-          }
-          this.size--;
-          return toReturn;
-        }
-
-        findStartingHead(value) {
           let currentHead = this.head;
-          while (currentHead.next) {
-            if (currentHead.data === value) {
-              return true;
-            }
+          while (index--) {
             currentHead = currentHead.next;
           }
-          return false;
-        } // O(n)
 
-        findStartingTail(value) {
-          let currentTail = this.tail;
-          while (currentTail.prev) {
-            if (currentTail.data === value) {
-              return true;
-            }
-            currentTail = currentTail.prev;
+          return currentHead;
+        } // O(N)
+
+        set(index, value) {
+          const node = this.get(index);
+          if (node) {
+            node.value = value;
+            return node;
           }
-          return false;
-        } // O(n)
-      }
+        } // O(N)
 
-      // 연결 리스트에서 중복된 항목 제거하기
-      function deleteDuplicateInUnsortedSll(sll) {
-        const track = {};
-        let temp = sll.head;
-        let prev = null;
-        while (temp) {
-          if (track[temp.data]) {
-            prev.next = temp.next;
-            sll.size--;
-          } else {
-            track[temp.data] = true;
-            prev = temp;
-          }
-          temp = temp.next;
-        }
-      }
+        insert(index, value) {
+          if (this.length === 0 || this.length < index) return;
+          if (index === 0) return this.unshift(value);
+          if (index === this.length) return this.push(value);
 
-      const dll2 = new DoublyLinkedList();
-      dll2.insertAtHead(10);
-      dll2.insertAtHead(12);
-      dll2.insertAtHead(20);
-      dll2.insertAtHead(10);
-      dll2.insertAtTail(3333);
+          const newNode = new Node(value);
+          const prevNode = this.get(index - 1);
+          newNode.prev = prevNode;
+          newNode.next = prevNode.next;
+          prevNode.next.prev = newNode;
+          prevNode.next = newNode;
+          this.length++;
+          return newNode;
+        } // O(N)
+
+        remove(index) {
+          if (this.length === 0 || this.length <= index) return;
+          if (index === 0) return this.shift();
+          if (index === this.length - 1) return this.pop();
+
+          const node = this.get(index);
+          node.prev.next = node.next;
+          node.next.prev = node.prev;
+          this.length--;
+          return node;
+        } // O(N)
+      }
     </script>
   </body>
 </html>
