@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>accordion</title>
+    <style>
+      input[id*="menu"] {
+        display: none;
+      }
+      input[id*="menu"] + label {
+        display: block;
+        padding: 20px;
+        border: 1px solid #232188;
+        border-bottom: 0;
+        color: #fff;
+        font-weight: 900;
+        background: #3634a5;
+        cursor: pointer;
+        position: relative;
+      }
+      input[id*="menu"] + label em {
+        position: absolute;
+        top: 50%;
+        right: 10px;
+        width: 30px;
+        height: 30px;
+        margin-top: -15px;
+        background: url("./img/arrow.png") 0 0 no-repeat;
+      }
+      input[id*="menu"] + label + div {
+        max-height: 0;
+        transition: all 0.35s;
+        overflow: hidden;
+        background: #ebf8ff;
+        font-size: 11px;
+      }
+      input[id*="menu"] + label + div p {
+        padding: 20px;
+      }
+      input[id*="menu"]:checked + label + div {
+        max-height: 100px;
+      }
+      input[id*="menu"]:checked + label em {
+        background-position: 0 -30px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="accordion-menu">
+      <input type="radio" name="menu" id="menu01" checked />
+      <label for="menu01">1 + 1<em></em></label>
+      <div><p>2</p></div>
+      <input type="radio" name="menu" id="menu02" />
+      <label for="menu02">3 * 6<em></em></label>
+      <div><p>18</p></div>
+      <input type="radio" name="menu" id="menu03" />
+      <label for="menu03">7 - 2<em></em></label>
+      <div><p>5</p></div>
+      <input type="radio" name="menu" id="menu04" />
+      <label for="menu04">32 / 4<em></em></label>
+      <div><p>8</p></div>
+    </div>
+  </body>
+</html>

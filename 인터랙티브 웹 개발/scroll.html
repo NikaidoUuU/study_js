@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Scroll Event</title>
+    <style>
+      img {
+        max-width: 100%;
+      }
+
+      .content {
+        height: 1000vh;
+        padding: 20%;
+        background: yellowgreen;
+      }
+
+      .output {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+        font-size: 2rem;
+        font-weight: 200;
+        color: #fff;
+        background: rgba(0, 0, 0, 0.4);
+      }
+
+      .ilbuni {
+        width: 100px;
+        margin: 20px auto;
+        transition: 1s;
+      }
+
+      .ilbuni.zoom {
+        transform: scale(2);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="output">output</div>
+    <div class="content">
+      <p>
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Earum sunt
+        dignissimos non, animi error ipsum culpa amet. Repudiandae aperiam
+        beatae ipsum voluptates, aliquam eos consequatur maiores illo doloribus
+        minima ratione officiis magni quaerat reprehenderit nesciunt amet.
+        Ratione velit nemo rem! Amet praesentium cupiditate, quod consectetur
+        quaerat itaque ipsam laudantium pariatur provident adipisci nulla
+        laborum rem sapiente voluptatem aperiam sit laboriosam! Corrupti fuga
+        necessitatibus voluptatibus sapiente doloribus expedita! Adipisci magnam
+        cumque sint, dolor deserunt numquam incidunt nulla pariatur asperiores,
+        odit placeat. Quisquam natus alias sit eligendi quod, sapiente
+        voluptatem delectus odit animi enim quasi, distinctio tempora facere
+        nihil culpa sequi fugiat?
+      </p>
+      <figure class="ilbuni">
+        <img src="image/ilbuni_0.png" alt="일분이" />
+      </figure>
+    </div>
+
+    <script>
+      (function() {
+        const output = document.querySelector(".output");
+        const ilbuni = document.querySelector(".ilbuni");
+
+        function showValue() {
+          // output.innerHTML = window.pageYOffset 전체 스크롤 위치;
+          // output.innerHTML = ilbuni.offsetTop 일분이 처음 위치만;
+          let posY = ilbuni.getBoundingClientRect().top;
+          output.innerHTML = posY;
+
+          if (posY < window.innerHeight * 0.2) {
+            ilbuni.classList.add("zoom");
+          } else {
+            ilbuni.classList.remove("zoom");
+          }
+        }
+
+        window.addEventListener("scroll", () => showValue());
+      })();
+    </script>
+  </body>
+</html>

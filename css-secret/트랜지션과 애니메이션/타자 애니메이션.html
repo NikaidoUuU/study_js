@@ -1,0 +1,42 @@
+<html>
+  <head>
+    <style>
+      body {
+        font-size: 2rem;
+      }
+
+      @keyframes typing {
+        from {
+          width: 0;
+        }
+      }
+
+      @keyframes caret {
+        50% {
+          border-color: transparent;
+        }
+      }
+
+      h1 {
+        width: 15ch;
+        border-right: 0.05em solid;
+        font-family: Consolas;
+        white-space: nowrap;
+        overflow: hidden;
+        animation: typing 2s, caret 1s infinite;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>CSS is awesome!</h1>
+    <h1>Hello~</h1>
+    <script>
+      const h1Elem = document.querySelectorAll("h1");
+      h1Elem.forEach(h1 => {
+        const len = h1.textContent.length;
+        h1.style.width = `${len}ch`;
+        h1.style.animationTimingFunction = `steps(${len}), steps(1)`;
+      });
+    </script>
+  </body>
+</html>

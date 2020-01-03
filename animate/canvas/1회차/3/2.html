@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <style>
+      .canvas {
+        background: #eee;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>setInterval은 프레임 유실, 배터리 문제가 있음</h1>
+    <canvas class="canvas" width="500" height="300"> </canvas>
+
+    <script>
+      const canvas = document.querySelector(".canvas");
+      const context = canvas.getContext("2d");
+      let xPos = 10;
+      let timerId;
+
+      function draw() {
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        context.beginPath();
+        context.arc(xPos, 150, 10, 0, Math.PI * 2, false);
+        context.fill();
+        xPos += 10;
+      }
+
+      timerId = setInterval(draw, 500);
+
+      canvas.addEventListener("click", () => {
+        clearInterval(timerId);
+      });
+    </script>
+  </body>
+</html>

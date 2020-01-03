@@ -1,0 +1,24 @@
+<html>
+  <head>
+    <style>
+      @keyframes loader {
+        to {
+          background-position: -800px 0;
+        }
+      }
+
+      .loader {
+        width: 80px;
+        height: 80px;
+        /* background: url(스프라이트이미지주소) no-repeat 0 0 */
+        animation: loader 1s infinite steps(10);
+        text-indent: 200%;
+        white-space: nowrap;
+        overflow: hidden;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="loader">Loading...</div>
+  </body>
+</html>

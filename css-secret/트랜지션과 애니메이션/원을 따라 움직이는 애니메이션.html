@@ -1,0 +1,45 @@
+<html>
+  <head>
+    <style>
+      @keyframes spin {
+        to {
+          transform: rotate(1turn);
+        }
+      }
+
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+      }
+
+      .path {
+        width: 300px;
+        height: 300px;
+        border-radius: 50%;
+        text-align: center;
+        background: gold;
+      }
+
+      .avatar {
+        animation: spin 3s infinite linear;
+        /* transform-origin: 50% 150px; */
+        transform-origin: center 150px;
+      }
+
+      .avatar img {
+        width: 50px;
+        animation: inherit;
+        animation-direction: reverse;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="path">
+      <div class="avatar">
+        <img src="ilbuni_0.png" />
+      </div>
+    </div>
+  </body>
+</html>

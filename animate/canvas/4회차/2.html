@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <style>
+      .canvas {
+        background: #eee;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Transform</h1>
+    <canvas class="canvas" width="500" height="500"
+      >이 브라우저는 캔버스를 지원하지 않습니다.</canvas
+    >
+
+    <script>
+      const canvas = document.querySelector(".canvas");
+      const context = canvas.getContext("2d");
+      let scaleValue = 1;
+      let rotationValue = 0;
+
+      function toRadian(d) {
+        return (d * Math.PI) / 180;
+      }
+
+      function draw() {
+        // context.clearRect(0, 0, canvas.width, canvas.height);
+        context.save();
+        context.setTransform(1, 0, 0, 1, 0, 0); // 단위 행렬
+        // context.resestTransform();
+        context.translate(350, 350); // 100 / 2
+        context.scale(scaleValue, scaleValue);
+        context.rotate(toRadian(rotationValue));
+        context.strokeRect(-50, -50, 100, 100);
+        context.restore();
+
+        scaleValue += 0.02;
+        rotationValue += 3;
+
+        context.fillRect(10, 10, 30, 30);
+
+        requestAnimationFrame(draw);
+      }
+
+      draw();
+    </script>
+  </body>
+</html>

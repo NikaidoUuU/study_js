@@ -1,0 +1,97 @@
+<html>
+  <head>
+    <style>
+      body {
+        padding: 1.5em;
+        font: 200%/1.6 Baskerville;
+        margin: 0;
+      }
+
+      input {
+        display: block;
+        padding: 0 0.4rem;
+        font: inherit;
+      }
+
+      input:not(:focus) + .callout {
+        transform: scale(0);
+        transition: transform 0.25s;
+      }
+
+      .callout {
+        position: absolute;
+        font-size: 75%;
+        max-width: 14em;
+        padding: 0.6em 0.8em;
+        border-radius: 0.3em;
+        margin: 0.3em 0 0 -0.2em;
+        background: #fed;
+        border: 1px solid rgba(0, 0, 0, 0.3);
+        box-shadow: 0.05em 0.2em 0.6em rgba(0, 0, 0, 0.2);
+        transition: transform 0.5s cubic-bezier(0.25, 0.1, 0.3, 1.5);
+        transform-origin: 1.4em -0.4em;
+      }
+
+      .callout:before {
+        content: "";
+        position: absolute;
+        top: -0.4em;
+        left: 1em;
+        padding: 0.35em;
+        background: inherit;
+        border: inherit;
+        border-right: 0;
+        border-bottom: 0;
+        transform: rotate(45deg);
+      }
+
+      @keyframes bounce {
+        60%,
+        80%,
+        to {
+          transform: translateY(350px);
+          animation-timing-function: cubic-bezier(0.15, 0.29, 0.29, 0.75);
+        }
+
+        70% {
+          transform: translateY(250px);
+        }
+
+        90% {
+          transform: translateY(300px);
+        }
+      }
+
+      .ball {
+        position: absolute;
+        left: 50%;
+        top: 0;
+        width: 60px;
+        height: 60px;
+        margin-left: -30px;
+        border-radius: 50%;
+        background: red;
+        animation: bounce 3s cubic-bezier(0.29, 0.15, 0.75, 0.29) forwards;
+      }
+
+      .floor {
+        position: absolute;
+        left: 0;
+        top: 410px;
+        width: 100%;
+        height: 5px;
+        background: black;
+      }
+    </style>
+  </head>
+  <body>
+    <label>
+      Your username: <input value="hanul" />
+      <span class="callout"
+        >Only letters, numbers, underscores (_) and hyphens (-) allowed!</span
+      >
+    </label>
+    <div class="ball"></div>
+    <div class="floor"></div>
+  </body>
+</html>

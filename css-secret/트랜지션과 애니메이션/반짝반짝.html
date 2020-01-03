@@ -1,0 +1,29 @@
+<html>
+  <head>
+    <style>
+      body {
+        margin: 0;
+        font-size: 2rem;
+      }
+
+      @keyframes blink-smooth {
+        /* to {
+          color: transparent;
+        } */
+        50% {
+          /* 고전적 반짝반짝 */
+          color: transparent;
+        }
+      }
+
+      .highlight {
+        /* animation: blink-smooth 1s 3; */
+        /* animation: blink-smooth 0.5s 6 alternate; 스무스 3번 */
+        animation: blink-smooth 1s infinite steps(1);
+      }
+    </style>
+  </head>
+  <body>
+    <h1 class="highlight">Lorem ipsum dolor sit amet.</h1>
+  </body>
+</html>
