@@ -50,7 +50,7 @@
 
       // 선택 정렬은 가장 작은 항목을 찾아서 해당 항목을 배열의 현 위치에 삽입하는 방식
       function selectionSort(arr) {
-        for (let i = 0; i < arr.length; i++) {
+        for (let i = 0; i < arr.length - 1; i++) {
           let min = i;
           for (let j = i + 1; j < arr.length; j++) {
             if (arr[j] < arr[min]) min = j;
@@ -76,7 +76,7 @@
       } // 시간: O(n^2), Best 상황은 O(n) 공간: O(1)
 
       // 퀵 정렬은 기준점을 획득한 다음 해당 기준점을 기준으로 배열을 나눈다.
-      // unstable한 정렬이다.
+      // unstable한 정렬이다. (stable, unstable: 같은 값을 가진 원소의 순서가 정렬 후에도 유지되는지)
       function quickSort(arr, left = 0, right = arr.length - 1) {
         if (left >= right) return;
 
@@ -116,9 +116,9 @@
       function mergeSort(arr) {
         if (arr.length < 2) return arr;
 
-        const mid = Math.floor(arr.length / 2);
-        const left = arr.slice(0, mid);
-        const right = arr.slice(mid);
+        const midIndex = Math.floor(arr.length / 2);
+        const left = arr.slice(0, midIndex);
+        const right = arr.slice(midIndex);
 
         return merge(mergeSort(left), mergeSort(right));
       }
