@@ -1,0 +1,9 @@
+#root {
+  min-height: 100vh;
+  display: flex;
+  font-size: 20px;
+
+  > * {
+    margin: auto;
+  }
+}

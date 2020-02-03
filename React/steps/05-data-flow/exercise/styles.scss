@@ -1,0 +1,56 @@
+#root {
+  display: flex;
+  min-height: 100vh;
+  font-size: 20pt;
+
+  > * {
+    margin: auto;
+  }
+}
+
+.product-item {
+  img {
+    width: 300px;
+    height: 300px;
+  }
+}
+
+button {
+  width: 200px;
+  height: 40px;
+  background-color: #ddd;
+  transition: all ease .3s;
+  margin: 20px;
+
+  &:hover {
+    background-color: #eee;
+  }
+
+  &.quantity-button {
+    background-color: #fff;
+    width: 50px;
+    height: 50px;
+    border: none;
+    border-radius: 4px;
+    font-size: 50px;
+    margin: 0;
+
+    &:hover {
+      background-color: #ddd;
+    }
+  }
+}
+
+.columns {
+  display: flex;
+  align-items: baseline;
+
+  & > div {
+    width: 50px;
+  }
+}
+
+.quantity {
+  border: none;
+  font-size: 50px;
+}

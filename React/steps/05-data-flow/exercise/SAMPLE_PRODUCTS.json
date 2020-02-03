@@ -1,0 +1,62 @@
+[
+    {
+        "id": 46373,
+        "name": "Dyson Vacuum",
+        "price": 570000,
+        "imagePath": "http://hamiltonvacuums.com/wp-content/uploads/2019/03/Dyson-Cyclone-V10-Animal-Lightweight-Cordless-Stick-Vacuum-Cleaner-1.jpg"
+    },
+    {
+        "id": 46278,
+        "name": "HP Monitor",
+        "price": 180000,
+        "imagePath": "http://bestbargain.co.ke/wp-content/uploads/2019/05/HP-23-Monitor.jpg"
+    },
+    {
+        "id": 23473,
+        "name": "Zara T-Shirt",
+        "price": 57000,
+        "imagePath": "https://i.ebayimg.com/images/g/LaYAAOSwsXVZaRRr/s-l1600.jpg"
+    },
+    {
+        "id": 26263,
+        "name": "Canon DSLR",
+        "price": 1460000,
+        "imagePath": "https://i.expansys.net/img/b/313694/canon-eos-6d-mark-ii-dslr-camera.jpg"
+    },
+    {
+        "id": 16366,
+        "name": "Apple Macbook Pro",
+        "price": 2410000,
+        "imagePath": "https://images-na.ssl-images-amazon.com/images/I/71qVOM%2BlgnL._SL1500_.jpg"
+    },
+    {
+        "id": 73646,
+        "name": "Logitech Keyboard",
+        "price": 32000,
+        "imagePath": "https://images-na.ssl-images-amazon.com/images/I/61zY%2B%2BaRqnL._SL1500_.jpg"
+    },
+    {
+        "id": 56362,
+        "name": "LG Air Purifier",
+        "price": 869000,
+        "imagePath": "https://images-na.ssl-images-amazon.com/images/I/8122VT14eYL._SY679_.jpg"
+    },
+    {
+        "id": 98373,
+        "name": "Maeil Milk 200ml",
+        "price": 1200,
+        "imagePath": "https://images-na.ssl-images-amazon.com/images/I/41xww4vcEgL.jpg"
+    },
+    {
+        "id": 73632,
+        "name": "Body Friend Chair",
+        "price": 759000,
+        "imagePath": "http://res.heraldm.com/content/image/2016/02/04/20160204001807_0.jpg"
+    },
+    {
+        "id": 77463,
+        "name": "Vans Sneakers",
+        "price": 65000,
+        "imagePath": "https://images-na.ssl-images-amazon.com/images/I/71KLiHiOT-L._AC_UX500_.jpg"
+    }
+]
