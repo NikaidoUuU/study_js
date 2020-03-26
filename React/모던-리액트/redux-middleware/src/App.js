@@ -5,7 +5,7 @@ import PostPage from './pages/PostPage';
 
 const App = () => (
   <>
-    <Route path="/" component={PostListPage} exact={true} />
+    <Route path="/" component={PostListPage} exact />
     <Route path="/:id" component={PostPage} />
   </>
 );
